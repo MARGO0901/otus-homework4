@@ -78,7 +78,7 @@ template <typename... Args>
 struct is_list<std::list<Args...>> : std::true_type {};
 
 /**
-    \brief Выводит на печать контейнера в виде ip-адреса
+    \brief Выводит на печать контейнер в виде ip-адреса
 
     Шаблонная функция для вывода элемента контейнера со вставкой точки '.' перед элементом, если его индекс не равен нулю
 
@@ -88,26 +88,15 @@ struct is_list<std::list<Args...>> : std::true_type {};
 template <typename T>
 typename std::enable_if_t<is_vector<T>::value || is_list<T>::value, void>
 print_ip(const T &container) {
-    if constexpr (is_vector<T>::value) {
-        LOG << "Vector" << std::endl;
-        for (auto i = 0; i < container.size(); ++i) {
-        if (i != 0)
-            std::cout << ".";
-        std::cout << container[i];
-        }
-        std::cout << std::endl;
-    }
-    if constexpr (is_list<T>::value) {
-        LOG << "List" << std::endl;
-        bool first = true;
-        for (const auto &elem : container) {
+    LOG << "List or vector" << std::endl;
+    bool first = true;
+    for (const auto &elem : container) {
         if (!first)
             std::cout << ".";
         std::cout << elem;
         first = false;
-        }
-        std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 
 //-------------------------------
