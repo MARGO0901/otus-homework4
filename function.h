@@ -103,15 +103,39 @@ print_ip(const T &container) {
 /**
     \brief Определяет, является ли Т типом std::tuple
 */
-template <typename T> struct is_tuple : std::false_type {};
+template <typename T>
+struct is_tuple : std::false_type {};
 
 template <typename... Args>
 struct is_tuple<std::tuple<Args...>> : std::true_type {};
 
 /**
+    \brief Шаблонная структура, содержащая функцию, выводящую на экран элемент с точкой перед ним
+
+    \param I Индекс текущего элемента в последовательности
+*/
+
+template <size_t I>
+struct PrintElem{
+    template <typename T>
+    static void print(const T &x) { std::cout << '.' << x; }
+};
+
+/**
+    \brief Специализация шаблонной структуры, содержащая функцию, выводящую на экран элемент с 0ым индексом 
+*/
+
+template <>
+struct PrintElem<0> {
+    template <typename T> 
+    static void print(const T &x) { std::cout  << x; }
+};
+
+/**
     \brief Выводит элемент с условным разделителем
 
-    Шаблонная функция для вывода элемента со вставкой точки '.' перед элементом, если его индекс `I` больше нуля.
+    Шаблонная функция для вывода элемента со вставкой точки '.' перед элементом,
+   если его индекс `I` больше нуля.
 
     \param I Индекс текущего элемента
     \tparam T Тип элемента для вывода
@@ -119,9 +143,7 @@ struct is_tuple<std::tuple<Args...>> : std::true_type {};
 */
 template <std::size_t I, typename T>
 void printElem(const T &x) {
-    if constexpr (I > 0)
-        std::cout << '.';
-    std::cout << x;
+    PrintElem<I>::print(x);
 }
 
 /**
